@@ -20,7 +20,37 @@ def chech_if_installed_vagrant():
         return True
 
 def install_vagrant():
-    os.system("apt update && apt -y install vagrant")
+    try:
+        os.system("apt update && apt -y install vagrant")
+    except:
+        print("fail")
+
+
+def vmStatus():
+    vmVagStatusOff="vagrant status | grep poweroff"
+    vmVagStatusOn="vagrant status | grep running"
+    vmVagStatusPresent="vagrant status | grep 'not created'|head -1"
+
+    if os.system(vmVagStatusOff) == 0:
+        return False
+    elif os.system(vmVagStatusOn) == 0:
+        return True
+    elif os.system(vmVagStatusPresent) == 0:
+        return "not created"
+
+def initVagVM():
+    if  chech_if_installed_vagrant():
+        if vmStatus():
+            print("VM is running, try run script with another parametr")
+            sys.exit()
+        elif vmStatus() == False:
+            print("VM is present but stoped, try run script with start or destroy parameter")
+        elif vmStatus() == "not created":
+            pass
+    elif not chech_if_installed_vagrant():
+        install_vagrant()
+
+
 
 if __name__=="__main__":
     if len(sys.argv) - 1 == 0:

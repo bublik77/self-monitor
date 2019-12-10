@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -24,13 +24,28 @@ def install_vagrant():
         os.system("apt update && apt -y install vagrant")
     except:
         print("fail")
+
 def creatVM():
-    osSelect=raw_input("enter VM OS to create centos or ubuntu =): ")
-    osVersion=raw_input("enter OS version: ")
-    creteVM="vagrant init %s/%s"%(osSelect,osVersion)
+    lineIndex=0
+    osSelect=input("enter VM OS to create centos or ubuntu =): ")
+    osVersion=input("enter "+ osSelect + " version : ")
+    vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  configvm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
+    creteVM="vagrant init {}/{}".format(osSelect,osVersion)
     os.system(createVM)
-
-
+    pathFile=os.getcwd() + "/" + "Vagrantfile"
+    with open(vgFile, 'r') as vgFileR: 
+        content=vgFileR.readlines() 
+        for index, line in enumerate(content): 
+            if line.startswith("end"): 
+                lineIndex=index
+    content.insert(lineIndex,vgFileOption)
+    with open(vgFile, 'w') as vgFileW: 
+        vgFileW.writelines(content)
+    try:
+        os.system("vagrant up"
+    except:
+        print("something goes wrong")
+        sys.exit()    
 
 def vmStatus():
     vmVagStatusOff="vagrant status | grep poweroff"

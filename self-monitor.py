@@ -3,7 +3,7 @@
 import os
 import sys
 
-def chech_if_installed_vagrant():
+def check_if_installed_vagrant():
     vagr="vagrant -v"
     return_value=os.system(vagr)
 
@@ -31,7 +31,11 @@ def creatVM():
     osVersion=input("enter "+ osSelect + " version : ")
     vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  configvm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
     creteVM="vagrant init {}/{}".format(osSelect,osVersion)
-    os.system(createVM)
+    try:
+        os.system(createVM)
+    except:
+        print("Vm not created")
+        sys.exit()
     pathFile=os.getcwd() + "/" + "Vagrantfile"
     with open(vgFile, 'r') as vgFileR: 
         content=vgFileR.readlines() 
@@ -42,7 +46,7 @@ def creatVM():
     with open(vgFile, 'w') as vgFileW: 
         vgFileW.writelines(content)
     try:
-        os.system("vagrant up"
+        os.system("vagrant up")
     except:
         print("something goes wrong")
         sys.exit()    

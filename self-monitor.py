@@ -24,6 +24,12 @@ def install_vagrant():
         os.system("apt update && apt -y install vagrant")
     except:
         print("fail")
+def creatVM():
+    osSelect=raw_input("enter VM OS to create centos or ubuntu =): ")
+    osVersion=raw_input("enter OS version: ")
+    creteVM="vagrant init %s/%s"%(osSelect,osVersion)
+    os.system(createVM)
+
 
 
 def vmStatus():

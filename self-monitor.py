@@ -27,29 +27,29 @@ def install_vagrant():
 
 def creatVM():
     lineIndex=0
-    osSelect=input("enter VM OS to create centos or ubuntu =): ")
-    osVersion=input("enter "+ osSelect + " version : ")
+    osSelect=input("enter VM OS to create centos or ubuntu: ")
+    osVersion=input("enter OS selected version : ")
     pathFile=os.getcwd() + "/" + "Vagrantfile"
-    vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  configvm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
-    creteVM="vagrant init {}/{}".format(osSelect,osVersion)
+    vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
+    createVgVm="vagrant init -m {}/{}".format(osSelect,osVersion)
     try:
-        os.system(createVM)
-    except:
-        print("Vm not created")
+        os.system(createVgVm)
+    except Exception as ex:
+        print(ex)
         sys.exit()
     
-    with open(vgFile, 'r') as vgFileR: 
+    with open(pathFile, 'r') as vgFileR: 
         content=vgFileR.readlines() 
         for index, line in enumerate(content): 
             if line.startswith("end"): 
                 lineIndex=index
     content.insert(lineIndex,vgFileOption)
-    with open(vgFile, 'w') as vgFileW: 
+    with open(pathFile, 'w') as vgFileW: 
         vgFileW.writelines(content)
     try:
         os.system("vagrant up")
-    except:
-        print("something goes wrong")
+    except Exception as ex:
+        print(ex)
         sys.exit()    
 
 def vmStatus():
@@ -65,7 +65,7 @@ def vmStatus():
         return "not created"
 
 def initVagVM():
-    if  chech_if_installed_vagrant():
+    if  check_if_installed_vagrant():
         if vmStatus():
             print("VM is running, try run script with another parametr")
             sys.exit()
@@ -73,35 +73,36 @@ def initVagVM():
             print("VM is present but stoped, try run script with start or destroy parameter")
         elif vmStatus() == "not created":
             pass
-    elif not chech_if_installed_vagrant():
+    elif not check_if_installed_vagrant():
         install_vagrant()
 
 
 
 if __name__=="__main__":
+
     if len(sys.argv) - 1 == 0:
         print("you need add some of argument")
         print("Example: init.py init")
         sys.exit(0)
         
     if sys.argv[1].lower() == "init":
-        if not chech_if_installed_vagrant():
-            install_vagrant()
+        if not check_if_installed_vagrant():
+            initVagVM()
+            creatVM()
         else:
-            print("")
-
+            creatVM()
     elif sys.argv[1].lower() == "stop":
-        if chech_if_installed_vagrant():
+        if check_if_installed_vagrant():
             os.system("vagrant halt")
         else:
             print("vagrant not installed")
     elif sys.argv[1].lower() == "start":
-        if chech_if_installed_vagrant():
+        if check_if_installed_vagrant():
             os.system("vagrant up")
         else:
             print("vagrant not installed")
     elif sys.argv[1].lower() == "destroy":
-        if chech_if_installed_vagrant():
+        if check_if_installed_vagrant():
             os.system("vagrant destroy")
         else:
             print("vagrant not installed")

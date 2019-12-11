@@ -29,6 +29,7 @@ def creatVM():
     lineIndex=0
     osSelect=input("enter VM OS to create centos or ubuntu =): ")
     osVersion=input("enter "+ osSelect + " version : ")
+    pathFile=os.getcwd() + "/" + "Vagrantfile"
     vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  configvm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
     creteVM="vagrant init {}/{}".format(osSelect,osVersion)
     try:
@@ -36,7 +37,7 @@ def creatVM():
     except:
         print("Vm not created")
         sys.exit()
-    pathFile=os.getcwd() + "/" + "Vagrantfile"
+    
     with open(vgFile, 'r') as vgFileR: 
         content=vgFileR.readlines() 
         for index, line in enumerate(content): 

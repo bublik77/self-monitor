@@ -53,9 +53,9 @@ def creatVM():
         sys.exit()    
 
 def vmStatus():
-    vmVagStatusOff="vagrant status | grep poweroff"
-    vmVagStatusOn="vagrant status | grep running"
-    vmVagStatusPresent="vagrant status | grep 'not created'|head -1"
+    vmVagStatusOff="vagrant status | grep -o poweroff"
+    vmVagStatusOn="vagrant status | grep -o running"
+    vmVagStatusPresent="vagrant status | grep -0 'not created'|head -1"
 
     if os.system(vmVagStatusOff) == 0:
         return False
@@ -63,6 +63,8 @@ def vmStatus():
         return True
     elif os.system(vmVagStatusPresent) == 0:
         return "not created"
+    else:
+        return "no vm"
 
 def initVagVM():
     if  check_if_installed_vagrant():
@@ -89,6 +91,12 @@ if __name__=="__main__":
         if not check_if_installed_vagrant():
             initVagVM()
             creatVM()
+        elif vmStatus() == "not created":
+            print("It looks like the VM Vagrant file is present but VM not created, try to delete Vagrant file and start script again")
+            sys.exit()
+        elif vmStatus() == False or vmStatus() == True:
+            print("It looks like the VM is present, try to start or stop or delete it")
+            sys.exit()
         else:
             creatVM()
     elif sys.argv[1].lower() == "stop":

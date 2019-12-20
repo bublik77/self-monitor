@@ -18,13 +18,30 @@ def check_if_installed_vagrant():
 	else:
 		#print("vagrant installed")
 		return True
+def check_ansible_installed():
+	ans="ansible --version"
+	return_value=os.system(ans)
+	if return_value == 0:
+		return True
+	else:
+		return False
 
 def install_vagrant():
 	try:
-		os.system("apt update && apt -y install vagrant")
+		os.system("sudo apt update && sudo apt -y install vagrant")
 	except:
 		print("fail")
 
+def install_ansible():
+addPpa="sudo apt-add-repository -y ppa:ansible/ansible"
+installAns="sudo apt install ansible"
+try:
+	os.system(addPpa)
+	os.system(installAns)		
+except Exception as ex:
+	print(ex)
+
+	
 def creatVM():
 
 	print("I in create VM function")

@@ -28,18 +28,48 @@ def check_ansible_installed():
 
 def install_vagrant():
 	try:
-		os.system("sudo apt update && sudo apt -y install vagrant")
-	except:
-		print("fail")
+		with open("/etc/os-release", 'r') as line:
+			for i in line:
+				if "ubuntu" in i:
+					try:
+						os.system("sudo apt update && sudo apt -y install vagrant")
+					except Exception as ex:
+						print(ex)
+				elif "centos" in i:
+					try:
+						os.system("sudo yum -y install vagrant")
+					except Exception as ex:
+						print(ex)
+	except Exception as ex:
+		print(ex)
 
 def install_ansible():
-addPpa="sudo apt-add-repository -y ppa:ansible/ansible"
-installAns="sudo apt install ansible"
-try:
-	os.system(addPpa)
-	os.system(installAns)		
-except Exception as ex:
-	print(ex)
+	addPpa="sudo apt-add-repository -y ppa:ansible/ansible"
+	addepel="sudo yum install -y epel-release"
+	installAnsC="sudo yum -y install ansible"
+	installAns="sudo apt install -y ansible"
+	try:
+		with open("/etc/os-release", 'r') as line:
+			for i in line:
+				if "ubuntu" in i:
+					try:
+						os.system(addPpa)
+						os.system(installAns)
+					except Exception as ex:
+						print(ex)
+				elif "centos" in i:
+					try:
+						os.system(addepel)
+						os.system(installAnsC)
+					except Exception as ex:
+						print(ex)
+	except Exception as ex:
+		print(ex)
+	try:
+		os.system(addPpa)
+		os.system(installAns)		
+	except Exception as ex:
+		print(ex)
 
 	
 def creatVM():
@@ -95,6 +125,8 @@ def initVagVM():
 	elif vmStatus() == "not created":
 		print("remove Vagrant file in the directory and run init again")
 	
+def run_ansible():
+	pass
 
 
 if __name__=="__main__":
@@ -108,6 +140,8 @@ if __name__=="__main__":
 		if not check_if_installed_vagrant():
 			install_vagrant()
 			creatVM()
+			if not check_ansible_installed():
+				installAns()
 		elif vmStatus() == "not created":
 			print("It looks like the VM Vagrant file is present but VM not created, try to delete Vagrant file and start script againAAAAAAA")
 			sys.exit()

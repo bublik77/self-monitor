@@ -2,31 +2,30 @@
 
 import os
 import sys
+import subprocess
 
 def check_if_installed_vagrant():
-	vagr="vagrant -v"
-	return_value=os.system(vagr)
+	try:
+		returnCode = subprocess.call(["vagrant","--version"], stdout=subprocess.PIPE)
+		if returnCode == 0:
+			return True
+		elif returnCode !=0:
+			return False
+	except Exception as ex:
+		print(ex)
 
-	if return_value != 0:
-		#print("vagrant not installed")
-		return False
-		#try:
-		#    os.system("apt -y install vagrant")
-		#except:
-		#    print("something goes wrong")
-
-	else:
-		#print("vagrant installed")
-		return True
 def check_ansible_installed():
-	ans="ansible --version"
-	return_value=os.system(ans)
-	if return_value == 0:
-		return True
-	else:
-		return False
+	try:
+		returnCode = subprocess.call(["ansible","--version"], stdout=subprocess.PIPE)
+		if returnCode == 0:
+	 		return True
+		elif returnCode !=0:
+	 		return False
+	except Exception as ex:
+		print(ex)
 
 def install_vagrant():
+	print("there is no vagrant and we are instaling it")
 	try:
 		with open("/etc/os-release", 'r') as line:
 			for i in line:
@@ -44,6 +43,7 @@ def install_vagrant():
 		print(ex)
 
 def install_ansible():
+	print("there is no ansible and we are instaling it")
 	addPpa="sudo apt-add-repository -y ppa:ansible/ansible"
 	addepel="sudo yum install -y epel-release"
 	installAnsC="sudo yum -y install ansible"
@@ -73,8 +73,7 @@ def install_ansible():
 
 	
 def creatVM():
-
-	print("I in create VM function")
+	#print("I'm in create VM function")
 	lineIndex=0
 	osSelect=input("enter VM OS to create centos or ubuntu: ")
 	osVersion=input("enter OS selected version : ")
@@ -141,7 +140,7 @@ if __name__=="__main__":
 			install_vagrant()
 			creatVM()
 			if not check_ansible_installed():
-				installAns()
+				install_ansible()
 		elif vmStatus() == "not created":
 			print("It looks like the VM Vagrant file is present but VM not created, try to delete Vagrant file and start script againAAAAAAA")
 			sys.exit()
@@ -149,6 +148,8 @@ if __name__=="__main__":
 			print("It looks like the VM is present, try to start or stop or delete it")
 			sys.exit()
 		else:
+			if not check_ansible_installed():
+				install_ansible()
 			creatVM()
 	elif sys.argv[1].lower() == "stop":
 		if check_if_installed_vagrant():

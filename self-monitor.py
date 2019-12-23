@@ -65,20 +65,14 @@ def install_ansible():
 						print(ex)
 	except Exception as ex:
 		print(ex)
-	try:
-		os.system(addPpa)
-		os.system(installAns)		
-	except Exception as ex:
-		print(ex)
 
-	
 def creatVM():
 	#print("I'm in create VM function")
 	lineIndex=0
 	osSelect=input("enter VM OS to create centos or ubuntu: ")
 	osVersion=input("enter OS selected version : ")
 	pathFile=os.getcwd() + "/" + "Vagrantfile"
-	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
+	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n  config.vm.provision \"file\", source: \"~/.ssh/id_rsa.pub\", destination: \"~/.ssh/authorized_keys\"\n" 
 	createVgVm="vagrant init -m {}/{}".format(osSelect,osVersion)
 	try:
 		os.system(createVgVm)

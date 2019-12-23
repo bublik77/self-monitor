@@ -52,19 +52,17 @@ def install_ansible():
 		with open("/etc/os-release", 'r') as line:
 			for i in line:
 				if "ubuntu" in i:
-					try:
-						os.system(addPpa)
-						os.system(installAns)
-					except Exception as ex:
-						print(ex)
+					osInst="ubuntu"
 				elif "centos" in i:
-					try:
-						os.system(addepel)
-						os.system(installAnsC)
-					except Exception as ex:
-						print(ex)
+					osInst="centos"
 	except Exception as ex:
 		print(ex)
+	if osInst == "ubutu":
+		os.system(addPpa)
+		os.system(installAns)
+	elif osInst == "centos":
+		os.system(addepel)
+		os.system(installAnsC)
 
 def creatVM():
 	#print("I'm in create VM function")

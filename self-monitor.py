@@ -30,17 +30,16 @@ def install_vagrant():
 		with open("/etc/os-release", 'r') as line:
 			for i in line:
 				if "ubuntu" in i:
-					try:
-						os.system("sudo apt update && sudo apt -y install vagrant")
-					except Exception as ex:
-						print(ex)
+					osInst="ubuntu"
 				elif "centos" in i:
-					try:
-						os.system("sudo yum -y install vagrant")
-					except Exception as ex:
-						print(ex)
+					osInst="centos"
 	except Exception as ex:
 		print(ex)
+	if osInst == "ubutu":
+		os.system("sudo apt update && sudo apt -y install vagrant")
+	elif osInst == "centos":
+		print("Please donload vagrant from https://www.vagrantup.com/downloads.html and run this script agein")
+		sys.exit()
 
 def install_ansible():
 	print("there is no ansible and we are instaling it")

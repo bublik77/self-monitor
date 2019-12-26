@@ -92,9 +92,6 @@ def creatVM():
 		sys.exit()    
 
 def vmStatus():
-	#vmVagStatusOff="vagrant status | grep -o poweroff"
-	#vmVagStatusOn="vagrant status | grep -o running""
-	#vmVagStatusPresent="vagrant status | grep -o "not created" | head -1"
 	pathFile=os.getcwd() + "/" + "Vagrantfile" 
 	if os.path.isfile(pathFile):
 		if os.system("vagrant status | grep -o poweroff") == 0:

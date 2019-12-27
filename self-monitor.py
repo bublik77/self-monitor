@@ -69,7 +69,7 @@ def creatVM():
 	osSelect=input("enter VM OS to create centos or ubuntu: ")
 	osVersion=input("enter OS selected version : ")
 	pathFile=os.getcwd() + "/" + "Vagrantfile"
-	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n  config.vm.provision \"shell\", inline: <<-SHELL\n  sed -ir \'s/PasswordAuthentication no/PasswordAuthentication yes/\' /etc/ssh/sshd_config\n  SHELL\n" 
+	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n  config.vm.provision \"shell\", inline: <<-SHELL\n    sed -ir \'s/PasswordAuthentication no/PasswordAuthentication yes/\' /etc/ssh/sshd_config\n  SHELL\n" 
 	createVgVm="vagrant init -m {}/{}".format(osSelect,osVersion)
 	try:
 		os.system(createVgVm)

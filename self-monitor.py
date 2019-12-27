@@ -9,20 +9,16 @@ def check_if_installed_vagrant():
 		returnCode = subprocess.call(["vagrant","--version"], stdout=subprocess.PIPE)
 		if returnCode == 0:
 			return True
-		elif returnCode !=0:
-			return False
-	except Exception as ex:
-		print(ex)
+	except:
+		return False
 
 def check_ansible_installed():
 	try:
 		returnCode = subprocess.call(["ansible","--version"], stdout=subprocess.PIPE)
 		if returnCode == 0:
 	 		return True
-		elif returnCode !=0:
-	 		return False
-	except Exception as ex:
-		print(ex)
+	except:
+		return False
 
 def install_vagrant():
 	osInst=""
@@ -94,25 +90,26 @@ def creatVM():
 		sys.exit()    
 
 def vmStatus():
-	pathFile=os.getcwd() + "/" + "Vagrantfile" 
+	pathFile=os.getcwd() + "/" + "Vagrantfile"
+	vgStatus = os.popen("vagrant status").read()
 	if os.path.isfile(pathFile):
-		if os.system("vagrant status | grep -o poweroff") == 0:
+		if "poweroff" in vgStatus:
 			return False
-		elif os.system("vagrant status | grep -o running") == 0:
+		elif "running" in vgStatus:
 			return True
-		elif os.system("vagrant status | grep -o 'not created' | head -1") == 0:
+		elif "not created" in vgStatus:
 			return "not created"
 	else:
-		return "no vm"
+		return "there is no Vagrant file, please run script with init options"
 
-def initVagVM():
-	if vmStatus():
-		print("VM is running, try run script with another parametr")
-		sys.exit()
-	elif vmStatus() == False:
-		print("VM is present but stoped, try run script with start or destroy parameter")
-	elif vmStatus() == "not created":
-		print("remove Vagrant file in the directory and run init again")
+# def initVagVM():
+# 	if vmStatus():
+# 		print("VM is running, try run script with another parametr")
+# 		sys.exit()
+# 	elif vmStatus() == False:
+# 		print("VM is present but stoped, try run script with start or destroy parameter")
+# 	elif vmStatus() == "not created":
+# 		print("remove Vagrant file in the directory and run init again")
 	
 def run_ansible():
 	invfile=os.getcwd() + "/" + "inv"

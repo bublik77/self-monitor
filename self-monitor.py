@@ -113,7 +113,16 @@ def initVagVM():
 		print("remove Vagrant file in the directory and run init again")
 	
 def run_ansible():
-	pass
+	invfile=os.getcwd() + "/" + "inv"
+	playBookFile= os.getcwd() + "/" + "install_soft.yml"
+	runCommand = "ansible-playbook -i {} {}".format(invfile,playBookFile)
+	if os.path.isfile(invfile) and os.path.isfile(playBookFile):
+		try:
+			os.system(runCommand)
+		except Exception as ex:
+			print(ex)
+	else:
+		print("Please check if inventory or playbook yml file is present")
 
 
 if __name__=="__main__":

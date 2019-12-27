@@ -21,8 +21,8 @@ def check_ansible_installed():
 		return False
 
 def install_vagrant():
-	osInst=""
 	print("there is no vagrant and we are instaling it")
+	osInst=""
 	try:
 		with open("/etc/os-release", 'r') as line:
 			for i in line:
@@ -32,7 +32,8 @@ def install_vagrant():
 					osInst="centos"
 	except Exception as ex:
 		print(ex)
-	if osInst == "ubutu":
+
+	if osInst == "ubuntu":
 		os.system("sudo apt update && sudo apt -y install vagrant")
 	elif osInst == "centos":
 		print("Please donload vagrant from https://www.vagrantup.com/downloads.html and run this script agein")
@@ -54,7 +55,8 @@ def install_ansible():
 					osInst="centos"
 	except Exception as ex:
 		print(ex)
-	if osInst == "ubutu":
+
+	if osInst == "ubuntu":
 		os.system(addPpa)
 		os.system(installAns)
 	elif osInst == "centos":
@@ -67,7 +69,7 @@ def creatVM():
 	osSelect=input("enter VM OS to create centos or ubuntu: ")
 	osVersion=input("enter OS selected version : ")
 	pathFile=os.getcwd() + "/" + "Vagrantfile"
-	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n  config.vm.provision \"file\", source: \"~/.ssh/id_rsa.pub\", destination: \"~/.ssh/authorized_keys\"\n" 
+	vgFileOption="  config.vm.network \"forwarded_port\", guest: 443, host: 443, auto_correct: true\n  config.vm.network \"private_network\", ip: \"172.16.0.20\", virtualbox__intnet: true\n" 
 	createVgVm="vagrant init -m {}/{}".format(osSelect,osVersion)
 	try:
 		os.system(createVgVm)

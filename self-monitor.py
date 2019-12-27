@@ -25,6 +25,7 @@ def check_ansible_installed():
 		print(ex)
 
 def install_vagrant():
+	osInst=""
 	print("there is no vagrant and we are instaling it")
 	try:
 		with open("/etc/os-release", 'r') as line:
@@ -43,6 +44,7 @@ def install_vagrant():
 
 def install_ansible():
 	print("there is no ansible and we are instaling it")
+	osInst=""
 	addPpa="sudo apt-add-repository -y ppa:ansible/ansible"
 	addepel="sudo yum install -y epel-release"
 	installAnsC="sudo yum -y install ansible"
